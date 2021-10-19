@@ -10,3 +10,34 @@ services:
     volumes:
       - ./app/:/go/app
     tty: true
+  db:
+    container_name: go_mysql_db
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    image: mysql:8.0
+    platform: linux/x86_64
+    restart: always
+    environment:
+      MYSQL_DATABASE: mysqldb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - data-store:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/log:/var/log/mysql
+    ports:
+      - "3306:3306"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8888:8080
+      
+volumes: 
+  data-store:
+
+
+      
